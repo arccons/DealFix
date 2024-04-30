@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function DealEdit({ deal, setShowEditForm, setPageMsg }) {
+function DealEdit({ deal, setGotDBdeals, setShowEditForm, setPageMsg }) {
 
   const [effectiveDate, setEffectiveDate] = useState(deal.effectiveDate);
   const [closingDate, setClosingDate] = useState(deal.closingDate);
@@ -56,6 +56,7 @@ function DealEdit({ deal, setShowEditForm, setPageMsg }) {
         .then((response) => {
           setDealUploaded(true);
           setShowEditForm(false);
+          setGotDBdeals(false);
           setPageMsg(response.data.message);
           console.log(response.data.message);
         })

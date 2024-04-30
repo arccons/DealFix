@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function MappingEdit({ mapping, setShowEditForm, setPageMsg }) {
+function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg }) {
 
   const [local_cmmt, setLocalCmmt] = useState(mapping.local_cmmt);
   const [is_active, setIsActive] = useState(mapping.is_active);
@@ -65,6 +65,7 @@ function MappingEdit({ mapping, setShowEditForm, setPageMsg }) {
       axios.post(url, formData, config)
         .then((response) => {
           setMappingUploaded(true);
+          setGotDBmappings(false);
           setShowEditForm(false);
           setPageMsg(response.data.message);
           console.log(response.data.message);

@@ -106,7 +106,7 @@ function Mappings({ DBdeal, setPageMsg }) {
         </table>
       </center>
       <br></br>
-      {showEditForm && <MappingEdit mapping={selectedMapping} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
+      {showEditForm && <MappingEdit mapping={selectedMapping} setGotDBmappings={setGotDBmappings} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
     </div>
   );
 }

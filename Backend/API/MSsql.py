@@ -17,7 +17,8 @@ def commitConnection(DBconn):
     DBconn.commit()
 
 def getDealsSQL():
-    sql_stmt = f"SELECT * from {DBstr}.Deals d INNER JOIN {DBstr}.mappings m ON d.id = m.deal_id ORDER BY d.dealName"
+    #sql_stmt = f"SELECT * from {DBstr}.Deals d INNER JOIN {DBstr}.mappings m ON d.id = m.deal_id ORDER BY d.dealName"
+    sql_stmt = f"SELECT * from {DBstr}.Deals d WHERE EXISTS (SELECT * FROM {DBstr}.Deals INNER JOIN {DBstr}.mappings m ON d.id = m.deal_id) ORDER BY d.dealName"
     return sql_stmt
 
 def updateDealSQL(dealID, effectiveDate, closingDate, subSector, isLiquid):

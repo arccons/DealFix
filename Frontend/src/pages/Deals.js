@@ -66,7 +66,7 @@ function Deals({ setDBdeal, setPageMsg }) {
     <div className="App">
       <center>
         <table>
-          <caption><b>Deal List</b></caption>
+          <caption><b>Deals</b></caption>
           <thead>
             <tr>
               <th>Deal ID</th>
@@ -96,7 +96,7 @@ function Deals({ setDBdeal, setPageMsg }) {
         </table>
       </center>
       <br></br>
-      {showEditForm && <DealEdit deal={currentDeal} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
+      {showEditForm && <DealEdit deal={currentDeal} setGotDBdeals={setGotDBdeals} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
     </div>
   );
 }
