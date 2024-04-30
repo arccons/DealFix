@@ -20,7 +20,9 @@ from API import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.dealList),
-    path('dealList/', views.dealList),
+    path('', views.deals),
+    path('deals/', views.deals),
     path('updateDeal/', views.updateDeal),
+    path('mappings/', views.mappings),
+    path('updateMapping/', views.updateMapping),
 ]

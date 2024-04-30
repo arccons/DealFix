@@ -6,10 +6,10 @@ fileStr = f"{__file__.strip(os.getcwd())}"
 
 readCursor, DBconn = DB.connect_to_DB()
 
-def getDealList():
-    fnStr = fileStr + "::getDealList"
+def getDeals():
+    fnStr = fileStr + "::getDeals"
 
-    dealList = readCursor.execute(DB.getDealListSQL()).fetchall()
+    dealList = readCursor.execute(DB.getDealsSQL()).fetchall()
     list_of_dicts = [{'id': item[0].rstrip(" "), 
                       'dealName': item[1],
                       'effectiveDate': str(item[2]),
@@ -32,3 +32,39 @@ def updateDeal(dealID, effectiveDate, closingDate, subSector, isLiquid):
     DB.closeConnection(writeDBconn)
 
     return {'retVal': True, 'updatedDeal': dealID}
+
+def getMappings(dealID):
+    fnStr = fileStr + "::getMappings"
+
+    dealList = readCursor.execute(DB.getMappingsSQL(dealID)).fetchall()
+    list_of_dicts = [{'deal_id': item[0].rstrip(" "), 
+                      'fund_name': item[1].rstrip(" "),
+                      'as_of_date': str(item[2]),
+                      'local_cmmt': item[3],
+                      'is_active': item[4],
+                      'realized_irr': item[5],
+                      'realized_pnl': item[6],
+                      'realized_date': str(item[7])} for item in dealList]
+    json_mappings = json.dumps(list_of_dicts)
+    print(json_mappings)
+
+    return {'retVal': True, 'mappingsList': json_mappings}
+
+def updateMapping(dealID, fundName, asOfDate, local_cmmt, is_active, realized_irr, realized_pnl, realized_date):
+    fnStr = fileStr + "::updateMapping"
+
+    writeCursor, writeDBconn = DB.connect_to_DB()
+    sql_stmt = DB.updateMappingSQL(dealID, 
+                                   fundName, 
+                                   asOfDate, 
+                                   local_cmmt, 
+                                   is_active, 
+                                   realized_irr, 
+                                   realized_pnl, 
+                                   realized_date)
+    print(sql_stmt)
+    writeCursor.execute(sql_stmt)
+    DB.commitConnection(writeDBconn)
+    DB.closeConnection(writeDBconn)
+
+    return {'retVal': True, 'updatedMapping': {dealID, fundName, asOfDate}}
