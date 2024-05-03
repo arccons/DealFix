@@ -11,18 +11,17 @@ import Deals from "./pages/Deals";
 import Mappings from "./pages/Mappings"
 
 function App() {
-  const [pageMsg, setPageMsg] = useState("");
   const [DBdeal, setDBdeal] = useState();
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout pageMsg={pageMsg} />}>
-          <Route index element={<Deals setDBdeal={setDBdeal} setPageMsg={setPageMsg} />} />
-          <Route path="mappings" element={<Mappings DBdeal={DBdeal} setPageMsg={setPageMsg} />} />
-          <Route path="contact" element={<Contact setPageMsg={setPageMsg} />} />
-          <Route path="about" element={<About setPageMsg={setPageMsg} />} />
-          <Route path="*" element={<NoPage setPageMsg={setPageMsg} />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Deals setDBdeal={setDBdeal} />} />
+          <Route path="mappings" element={<Mappings DBdeal={DBdeal} />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="about" element={<About />} />
+          <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function DealEdit({ deal, setGotDBdeals, setShowEditForm, setPageMsg }) {
 
@@ -9,8 +10,10 @@ function DealEdit({ deal, setGotDBdeals, setShowEditForm, setPageMsg }) {
   const [isLiquid, setIsLiquid] = useState(deal.isLiquid);
 
   const [itemChanged, setItemChanged] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [dealUploaded, setDealUploaded] = useState(false);
+  //const [formSubmitted, setFormSubmitted] = useState(false);
+  //const [dealUploaded, setDealUploaded] = useState(false);
+
+  const navigate = useNavigate();
 
   function handleEffectiveDateChange(event) {
     event.preventDefault();
@@ -39,7 +42,7 @@ function DealEdit({ deal, setGotDBdeals, setShowEditForm, setPageMsg }) {
   function handleSubmit(event) {
     event.preventDefault();
     if (itemChanged) {
-      setFormSubmitted(true);
+      //setFormSubmitted(true);
       const url = 'http://localhost:8000/updateDeal/';
       const formData = new FormData();
       formData.append('dealID', deal.id);
@@ -54,25 +57,28 @@ function DealEdit({ deal, setGotDBdeals, setShowEditForm, setPageMsg }) {
       };
       axios.post(url, formData, config)
         .then((response) => {
-          setDealUploaded(true);
-          setShowEditForm(false);
           setGotDBdeals(false);
-          setPageMsg(response.data.message);
-          console.log(response.data.message);
+          setShowEditForm(false);
+          setPageMsg("Deal details updated.");
         })
         .catch((error) => {
-          setDealUploaded(false);
-          setPageMsg(error.message);
-          console.error("error.message: ", error);
+          setPageMsg("Error updating deal details. " + error);
         });
     }
   }
 
+  function handleCancel() {
+    setItemChanged(false);
+    setShowEditForm(false);
+    setPageMsg("Got deal list from DB.");
+    navigate("/");
+  }
+
   return (
     <div className="App">
-      <form id="MainForm" onSubmit={handleSubmit}>
+      < form id="MainForm" onSubmit={handleSubmit}>
         <center>
-          <table id='record'>
+          <table id='EditDeal'>
             <caption><b>Edit Deal:</b> {deal.dealName}</caption>
             <thead>
               <tr>
@@ -104,9 +110,8 @@ function DealEdit({ deal, setGotDBdeals, setShowEditForm, setPageMsg }) {
               </tr>
             </tbody>
           </table>
-          <button>Save Changes</button>
-          {formSubmitted && dealUploaded && <center><b><p>Deal Updated successfully!</p></b></center>}
-          {formSubmitted && !dealUploaded && <center><p><b> Deal Update failed!</b></p></center>}
+          <br></br>
+          <button onClick={() => handleCancel()}>Cancel</button>{itemChanged && <button>Save Changes</button>}
         </center>
       </form>
     </div>

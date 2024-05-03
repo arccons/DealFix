@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DealEdit from '../Components/DealEdit';
 
-function Deals({ setDBdeal, setPageMsg }) {
+function Deals({ setDBdeal }) {
 
+  const [pageMsg, setPageMsg] = useState("");
   const [gotDBdeals, setGotDBdeals] = useState(false);
   const [dealList, setDealList] = useState([]);
+
   const [currentDeal, setCurrentDeal] = useState();
   const [showEditForm, setShowEditForm] = useState(false);
 
@@ -25,16 +27,11 @@ function Deals({ setDBdeal, setPageMsg }) {
       axios.get(url, config)
         .then(response => {
           setDealList(JSON.parse(response.data.DEAL_LIST));
-          console.log(response.data.DEAL_LIST);
           setGotDBdeals(true);
-          if (showEditForm) {
-            setShowEditForm(false);
-          } else {
-            setPageMsg("");
-          }
+          setShowEditForm(false);
+          setPageMsg("Got deal list from DB.");
         })
         .catch(error => {
-          console.error("Error getting deal list: ", error);
           setPageMsg("Error getting deal list: " + error);
           setGotDBdeals(false);
           setShowEditForm(false);
@@ -44,22 +41,20 @@ function Deals({ setDBdeal, setPageMsg }) {
 
   function handleEditClick(event) {
     event.preventDefault();
-    const selectedIndex = event.target.value;
-    console.log(selectedIndex);
-    const dl = dealList[selectedIndex];
-    console.log(dl);
-    setCurrentDeal(dl);
     setShowEditForm(true);
+    const selectedIndex = event.target.value;
+    const dl = dealList[selectedIndex];
+    setCurrentDeal(dl);
+    setPageMsg("Got deal details.");
   }
 
   function handleMappingClick(event) {
     event.preventDefault();
+    setShowEditForm(false);
     const selectedIndex = event.target.value;
-    console.log(selectedIndex);
     const dl = dealList[selectedIndex];
     setDBdeal(dl);
-    console.log(dl);
-    navigate('/mappings', { state: { deal: dl } });
+    navigate('/mappings');
   }
 
   return (
@@ -94,9 +89,11 @@ function Deals({ setDBdeal, setPageMsg }) {
             ))}
           </tbody>
         </table>
+        <br></br>
+        {showEditForm && <DealEdit deal={currentDeal} setGotDBdeals={setGotDBdeals} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
+        <br></br>
+        {pageMsg}
       </center>
-      <br></br>
-      {showEditForm && <DealEdit deal={currentDeal} setGotDBdeals={setGotDBdeals} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
     </div>
   );
 }

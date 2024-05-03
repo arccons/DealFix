@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg }) {
 
@@ -10,8 +11,8 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
   const [realized_date, setRealizedDate] = useState(mapping.realized_date);
 
   const [itemChanged, setItemChanged] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [mappingUploaded, setMappingUploaded] = useState(false);
+
+  const navigate = useNavigate();
 
   function handleLocalCmmtChange(event) {
     event.preventDefault();
@@ -46,7 +47,6 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
   function handleSubmit(event) {
     event.preventDefault();
     if (itemChanged) {
-      setFormSubmitted(true);
       const url = 'http://localhost:8000/updateMapping/';
       const formData = new FormData();
       formData.append('deal_id', mapping.deal_id);
@@ -64,18 +64,21 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
       };
       axios.post(url, formData, config)
         .then((response) => {
-          setMappingUploaded(true);
           setGotDBmappings(false);
           setShowEditForm(false);
-          setPageMsg(response.data.message);
-          console.log(response.data.message);
+          setPageMsg("Mapping details updated. " + response.message);
         })
         .catch((error) => {
-          setMappingUploaded(false);
-          setPageMsg(error.message);
-          console.error("error.message: ", error);
+          setPageMsg("Error updating mapping details. " + error);
         });
     }
+  }
+
+  function handleCancel() {
+    setShowEditForm(false);
+    setItemChanged(false);
+    setPageMsg("Got mappings list from DB for deal.");
+    navigate("/mappings");
   }
 
   return (
@@ -83,7 +86,7 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
       <form id="MainForm" onSubmit={handleSubmit}>
         <center>
           <table id='record'>
-            <caption><b>Edit Mapping:</b> {mapping.fund_name}</caption>
+            <caption>Edit Mapping: <b>{mapping.fund_name}</b></caption>
             <thead>
               <tr>
                 <th>Mapping Field</th>
@@ -119,9 +122,8 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
               </tr>
             </tbody>
           </table>
-          <button>Save Changes</button>
-          {formSubmitted && mappingUploaded && <center><b><p>Mapping Updated successfully!</p></b></center>}
-          {formSubmitted && !mappingUploaded && <center><p><b> Mapping Update failed!</b></p></center>}
+          <br></br>
+          <button onClick={() => handleCancel()}>Cancel</button>{itemChanged && <button>Save Changes</button>}
         </center>
       </form>
     </div>

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import MappingEdit from '../Components/MappingEdit';
+import { useNavigate } from 'react-router-dom';
 
-function Mappings({ DBdeal, setPageMsg }) {
+function Mappings({ DBdeal }) {
 
+  const [pageMsg, setPageMsg] = useState("");
   const [gotDBmappings, setGotDBmappings] = useState(false);
   const [mappingsList, setMappingsList] = useState([]);
+
   const [selectedMapping, setSelectedMapping] = useState();
   const [showEditForm, setShowEditForm] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("useEffect: Entered.");
@@ -25,17 +30,12 @@ function Mappings({ DBdeal, setPageMsg }) {
       axios.post(url, formData, config)
         .then(response => {
           setMappingsList(JSON.parse(response.data.MAPPING_LIST));
-          console.log(JSON.parse(response.data.MAPPING_LIST));
           setGotDBmappings(true);
-          if (showEditForm) {
-            setShowEditForm(false);
-          } else {
-            setPageMsg("");
-          }
+          setShowEditForm(false);
+          setPageMsg("Got mappings list from DB for deal: " + DBdeal.dealName);
         })
         .catch(error => {
-          console.error("Error getting deal list: ", error);
-          setPageMsg("Error getting deal list: " + error);
+          setPageMsg("Error getting mappings list: " + error);
           setGotDBmappings(false);
           setShowEditForm(false);
         });
@@ -45,10 +45,9 @@ function Mappings({ DBdeal, setPageMsg }) {
   function handleEditClick(event) {
     event.preventDefault();
     const selectedIndex = event.target.value;
-    console.log(selectedIndex);
     const mp = mappingsList[selectedIndex];
     setSelectedMapping(mp);
-    console.log(mp);
+    setPageMsg("Editing Mapping for deal ID: " + DBdeal.dealName);
     setShowEditForm(true);
   }
 
@@ -68,12 +67,14 @@ function Mappings({ DBdeal, setPageMsg }) {
             </tr>
           </thead>
           <tbody>
-            <td>{DBdeal.id}</td>
-            <td>{DBdeal.dealName}</td>
-            <td>{DBdeal.effectiveDate}</td>
-            <td>{DBdeal.closingDate}</td>
-            <td>{DBdeal.subSector}</td>
-            <td>{DBdeal.isLiquid}</td>
+            <tr>
+              <td>{DBdeal.id}</td>
+              <td>{DBdeal.dealName}</td>
+              <td>{DBdeal.effectiveDate}</td>
+              <td>{DBdeal.closingDate}</td>
+              <td>{DBdeal.subSector}</td>
+              <td>{DBdeal.isLiquid}</td>
+            </tr>
           </tbody>
         </table>
         <br></br>
@@ -91,7 +92,7 @@ function Mappings({ DBdeal, setPageMsg }) {
           </thead>
           <tbody>
             {mappingsList.map((mp, index) => (
-              <tr>
+              <tr key={index}>
                 <td>{mp.fund_name}</td>
                 <td>{mp.as_of_date}</td>
                 <td>{mp.local_cmmt}</td>
@@ -99,14 +100,18 @@ function Mappings({ DBdeal, setPageMsg }) {
                 <td>{mp.realized_irr}</td>
                 <td>{mp.realized_pnl}</td>
                 <td>{mp.realized_date}</td>
-                <td><button key={index} value={index} onClick={handleEditClick}>Edit</button></td>
+                <td><button value={index} onClick={handleEditClick}>Edit</button></td>
               </tr>
             ))}
           </tbody>
         </table>
+        <br></br>
+        {!showEditForm && <button onClick={() => navigate(-1)}>Done</button>}
+        <br></br>
+        {showEditForm && <MappingEdit mapping={selectedMapping} setGotDBmappings={setGotDBmappings} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
+        <br></br>
+        {pageMsg}
       </center>
-      <br></br>
-      {showEditForm && <MappingEdit mapping={selectedMapping} setGotDBmappings={setGotDBmappings} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
     </div>
   );
 }

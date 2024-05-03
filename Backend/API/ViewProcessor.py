@@ -1,5 +1,4 @@
 import os, json
-#from datetime import datetime as dt
 from API import MSsql as DB
 
 fileStr = f"{__file__.strip(os.getcwd())}"
@@ -17,7 +16,7 @@ def getDeals():
                       'subSector': item[4],
                       'isLiquid': item[5].rstrip(" ")} for item in dealList]
     json_dealList = json.dumps(list_of_dicts)
-    print(json_dealList)
+    #print(json_dealList)
 
     return {'retVal': True, 'dealList': json_dealList}
 
@@ -26,7 +25,7 @@ def updateDeal(dealID, effectiveDate, closingDate, subSector, isLiquid):
 
     writeCursor, writeDBconn = DB.connect_to_DB()
     sql_stmt = DB.updateDealSQL(dealID, effectiveDate, closingDate, subSector, isLiquid)
-    print(sql_stmt)
+    #print(sql_stmt)
     writeCursor.execute(sql_stmt)
     DB.commitConnection(writeDBconn)
     DB.closeConnection(writeDBconn)
@@ -36,7 +35,9 @@ def updateDeal(dealID, effectiveDate, closingDate, subSector, isLiquid):
 def getMappings(dealID):
     fnStr = fileStr + "::getMappings"
 
-    dealList = readCursor.execute(DB.getMappingsSQL(dealID)).fetchall()
+    sql_stmt = DB.getMappingsSQL(dealID)
+    print(sql_stmt)
+    dealList = readCursor.execute(sql_stmt).fetchall()
     list_of_dicts = [{'deal_id': item[0].rstrip(" "), 
                       'fund_name': item[1].rstrip(" "),
                       'as_of_date': str(item[2]),
@@ -62,7 +63,7 @@ def updateMapping(dealID, fundName, asOfDate, local_cmmt, is_active, realized_ir
                                    realized_irr, 
                                    realized_pnl, 
                                    realized_date)
-    print(sql_stmt)
+    #print(sql_stmt)
     writeCursor.execute(sql_stmt)
     DB.commitConnection(writeDBconn)
     DB.closeConnection(writeDBconn)
