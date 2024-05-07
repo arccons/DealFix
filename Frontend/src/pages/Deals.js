@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import DealEdit from '../Components/DealEdit';
 
 function Deals({ setDBdeal }) {
@@ -37,7 +38,7 @@ function Deals({ setDBdeal }) {
           setShowEditForm(false);
         });
     }
-  }, [gotDBdeals, setPageMsg, showEditForm])
+  }, [gotDBdeals, pageMsg, showEditForm])
 
   function handleEditClick(event) {
     event.preventDefault();
@@ -60,9 +61,9 @@ function Deals({ setDBdeal }) {
   return (
     <div className="App">
       <center>
-        <table>
-          <caption><b>Deals</b></caption>
-          <thead>
+        <h5>Deals</h5>
+        <MDBTable>
+          <MDBTableHead>
             <tr>
               <th>Deal ID</th>
               <th>Deal Name</th>
@@ -73,8 +74,8 @@ function Deals({ setDBdeal }) {
               <th>Edit</th>
               <th>Mappings</th>
             </tr>
-          </thead>
-          <tbody>
+          </MDBTableHead>
+          <MDBTableBody>
             {dealList.map((d, index) => (
               <tr key={index}>
                 <td>{d.id}</td>
@@ -87,11 +88,9 @@ function Deals({ setDBdeal }) {
                 <td><button value={index} onClick={handleMappingClick}>Mappings</button></td>
               </tr>
             ))}
-          </tbody>
-        </table>
-        <br></br>
+          </MDBTableBody>
+        </MDBTable>
         {showEditForm && <DealEdit deal={currentDeal} setGotDBdeals={setGotDBdeals} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
-        <br></br>
         {pageMsg}
       </center>
     </div>

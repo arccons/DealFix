@@ -9,6 +9,7 @@ import NoPage from "./pages/NoPage";
 import About from "./pages/About";
 import Deals from "./pages/Deals";
 import Mappings from "./pages/Mappings"
+import Search from './pages/Search';
 
 function App() {
   const [DBdeal, setDBdeal] = useState();
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Deals setDBdeal={setDBdeal} />} />
           <Route path="mappings" element={<Mappings DBdeal={DBdeal} />} />
+          <Route path="search" element={<Search />} />
           <Route path="contact" element={<Contact />} />
           <Route path="about" element={<About />} />
           <Route path="*" element={<NoPage />} />

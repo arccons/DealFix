@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import MappingEdit from '../Components/MappingEdit';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import MappingEdit from '../Components/MappingEdit';
 
 function Mappings({ DBdeal }) {
 
@@ -54,9 +55,9 @@ function Mappings({ DBdeal }) {
   return (
     <div className="App">
       <center>
-        <table>
-          <caption><b>Deal</b></caption>
-          <thead>
+        <h6>Deal</h6>
+        <MDBTable>
+          <MDBTableHead>
             <tr>
               <th>Deal ID</th>
               <th>Deal Name</th>
@@ -65,8 +66,8 @@ function Mappings({ DBdeal }) {
               <th>Sub-Sector</th>
               <th>Is Liquid</th>
             </tr>
-          </thead>
-          <tbody>
+          </MDBTableHead>
+          <MDBTableBody>
             <tr>
               <td>{DBdeal.id}</td>
               <td>{DBdeal.dealName}</td>
@@ -75,22 +76,24 @@ function Mappings({ DBdeal }) {
               <td>{DBdeal.subSector}</td>
               <td>{DBdeal.isLiquid}</td>
             </tr>
-          </tbody>
-        </table>
+          </MDBTableBody>
+        </MDBTable>
         <br></br>
-        <table>
-          <caption><b>Mappings</b></caption>
-          <thead>
-            <th>Fund Name</th>
-            <th>As of Date</th>
-            <th>Local Cmmt</th>
-            <th>Is Active</th>
-            <th>Realized IRR</th>
-            <th>Realized PNL</th>
-            <th>Realized Date</th>
-            <th>Edit</th>
-          </thead>
-          <tbody>
+        <h6>Mappings</h6>
+        <MDBTable>
+          <MDBTableHead>
+            <tr>
+              <th>Fund Name</th>
+              <th>As of Date</th>
+              <th>Local Cmmt</th>
+              <th>Is Active</th>
+              <th>Realized IRR</th>
+              <th>Realized PNL</th>
+              <th>Realized Date</th>
+              <th>Edit</th>
+            </tr>
+          </MDBTableHead>
+          <MDBTableBody>
             {mappingsList.map((mp, index) => (
               <tr key={index}>
                 <td>{mp.fund_name}</td>
@@ -103,10 +106,10 @@ function Mappings({ DBdeal }) {
                 <td><button value={index} onClick={handleEditClick}>Edit</button></td>
               </tr>
             ))}
-          </tbody>
-        </table>
+          </MDBTableBody>
+        </MDBTable>
         <br></br>
-        {!showEditForm && <button onClick={() => navigate(-1)}>Done</button>}
+        {!showEditForm && <button onClick={() => navigate("/")}>Done</button>}
         <br></br>
         {showEditForm && <MappingEdit mapping={selectedMapping} setGotDBmappings={setGotDBmappings} setShowEditForm={setShowEditForm} setPageMsg={setPageMsg} />}
         <br></br>

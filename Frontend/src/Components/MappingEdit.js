@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg }) {
 
@@ -85,16 +86,16 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
     <div className="App">
       <form id="MainForm" onSubmit={handleSubmit}>
         <center>
-          <table id='record'>
-            <caption>Edit Mapping: <b>{mapping.fund_name}</b></caption>
-            <thead>
+          <h6>Edit Mapping: <b>{mapping.fund_name}</b></h6>
+          <MDBTable id='record'>
+            <MDBTableHead>
               <tr>
                 <th>Mapping Field</th>
                 <th>Current Value</th>
                 <th>Updated Value</th>
               </tr>
-            </thead>
-            <tbody>
+            </MDBTableHead>
+            <MDBTableBody>
               <tr>
                 <td>Local Cmmt</td>
                 <td>{mapping.local_cmmt}</td>
@@ -120,8 +121,8 @@ function MappingEdit({ mapping, setGotDBmappings, setShowEditForm, setPageMsg })
                 <td>{mapping.realized_date}</td>
                 <td><input type="Date" id='realizedDate' onChange={handleRealizedDateChange}></input></td>
               </tr>
-            </tbody>
-          </table>
+            </MDBTableBody>
+          </MDBTable>
           <br></br>
           <button onClick={() => handleCancel()}>Cancel</button>{itemChanged && <button>Save Changes</button>}
         </center>

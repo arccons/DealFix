@@ -1,32 +1,34 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
+import {
+    MDBContainer,
+    MDBNavbar,
+    MDBNavbarBrand,
+    MDBNavbarNav,
+    MDBNavbarItem,
+    MDBNavbarLink,
+    MDBCollapse
+} from 'mdb-react-ui-kit';
 
 export default function Header() {
+
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Button color="inherit">Deals</Button>
-                    <Typography variant="h6" component="div" align={'right'} sx={{ flexGrow: 1 }}>
-                        DealFix
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-        </Box>
+        <>
+            <MDBNavbar expand='lg' light bgColor='light'>
+                <MDBContainer fluid>
+                    <MDBNavbarBrand>DealFix</MDBNavbarBrand>
+                    <MDBCollapse navbar>
+                        <MDBNavbarNav>
+                            <MDBNavbarItem>
+                                <MDBNavbarLink active aria-current='page' href='/'>Deals</MDBNavbarLink>
+                            </MDBNavbarItem>
+                            <MDBNavbarItem>
+                                <MDBNavbarLink href='search'>Search</MDBNavbarLink>
+                            </MDBNavbarItem>
+                        </MDBNavbarNav>
+                    </MDBCollapse>
+                </MDBContainer>
+            </MDBNavbar>
+            <br></br>
+        </>
     );
 }
